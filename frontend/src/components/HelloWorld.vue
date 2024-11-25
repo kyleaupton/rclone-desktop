@@ -1,47 +1,41 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import {GreetService} from "../../bindings/changeme";
-import {Events} from "@wailsio/runtime";
-
-defineProps<{ msg: string }>()
-
-const name = ref('')
-const result = ref('Please enter your name below 👇')
-const time = ref('Listening for Time event...')
-
-const doGreet = () => {
-  let localName = name.value;
-  if (!localName) {
-    localName = 'anonymous';
-  }
-  GreetService.Greet(localName).then((resultValue: string) => {
-    result.value = resultValue;
-  }).catch((err: Error) => {
-    console.log(err);
-  });
-}
-
-onMounted(() => {
-  Events.On('time', (timeValue: { data: string }) => {
-    time.value = timeValue.data;
-  });
-})
-
+defineProps<{
+  msg: string
+}>()
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-
-  <div class="result">{{ result }}</div>
-  <div class="card">
-    <div class="input-box">
-      <input class="input" v-model="name" type="text" autocomplete="off"/>
-      <button class="btn" @click="doGreet">Greet</button>
-    </div>
-  </div>
-
-  <div class="footer">
-    <div><p>Click on the Wails logo to learn more</p></div>
-    <div><p>{{ time }}</p></div>
+  <div class="greetings">
+    <h1 class="green">{{ msg }}</h1>
+    <h3>
+      You’ve successfully created a project with
+      <a href="https://vite.dev/" target="_blank" rel="noopener">Vite</a> +
+      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>. What's next?
+    </h3>
   </div>
 </template>
+
+<style scoped>
+h1 {
+  font-weight: 500;
+  font-size: 2.6rem;
+  position: relative;
+  top: -10px;
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+.greetings h1,
+.greetings h3 {
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .greetings h1,
+  .greetings h3 {
+    text-align: left;
+  }
+}
+</style>
